@@ -19,7 +19,6 @@ class Analyse:
         -------
         TYPE:dictionnaire
             DESCRIPTION: dictionnaire des mots frequents avec leur compteur
-
         """
         return self.mot
     
@@ -44,7 +43,7 @@ class Analyse:
                
     def ajout_tweet(self,data):
         """
-        Ajoute au dictionnaire les mot valide
+        Ajoute au dictionnaire les mots valides
 
         Parameters
         ----------
@@ -54,7 +53,6 @@ class Analyse:
         Returns
         -------
         None.
-
         """
         ponctuation=[' ',',',"'","  ",";","!","...","?","",':','-',"’","«","»"]#Liste des ponctuations
         tweet=data.lower().split()#liste de chaque mot sans majuscule
@@ -80,18 +78,18 @@ class Analyse:
         Returns
         -------
         key_max : TYPE: String
-            DESCRIPTION: clé avec le compteur maximum
+            DESCRIPTION: Clé avec le compteur maximum
         """
         compteur=0
         key_max=''
         for key in self.mot.keys():
-            if compteur==0:
+            if compteur == 0:
                 key_max=key#premier clé pour initialise la fonction
                 compteur+=1
-            if self.mot[key]>self.mot[key_max]:
+            if self.mot[key] > self.mot[key_max]:
                 key_max=key
         return key_max
-                    
+    
     def frequence_total(self,nombre):
         """
         Parameters
@@ -103,35 +101,38 @@ class Analyse:
         -------
         resultat : TYPE: Dictionary
             DESCRIPTION: mot frequent avec les compteurs associes
-
         """
         resultat={}
         for i in range(nombre):
             key_max=self.maximum()
-            self.__str__(key_max,self.mot[key_max])#fonction d'affichage
-            resultat[key_max]=self.mot[key_max]
+            
+            resultat[key_max] = self.mot[key_max]
             del self.mot[key_max]        
         return resultat
-            
-            
-            
-    def __str__(self,mot,compteur):
-        '''
-        fonction d'affichage
+    
+    def phrase_resultat(self,mot):
+        """
         Parameters
         ----------
-        mot : TYPE: chaine de caractere
-            DESCRIPTION: mot qui apparait souvent
-        compteur : TYPE: entier 
-            DESCRIPTION: nombre de fois qu'apparait le mot
+        mot : TYPE: Dictionary
+            DESCRIPTION: Dictionnaire des mots fréquents
 
         Returns
         -------
-        None.
-        '''
-        print("Le mot '"+str(mot)+"' apparait "+str(compteur)+" fois sur l'échantillons de tweets.")
+        phrase : TYPE: String
+            DESCRIPTION:
+        """
+        phrase=''
+        for key in mot.keys():
+            phrase+="Le mot '"+str(key)+"' apparait "+str(mot[key])+" fois sur l'échantillons des tweets.\n"
+        return phrase
+    def __str__(self,mot):
+        """fonction d'affichage des tweets fréquents"""
+        for key in mot.keys():
+            print("Le mot '"+str(key)+"' apparait "+str(mot[key])+" fois sur l'échantillons des tweets.")
              
-            
+    def renitilaiser_mot(self):
+        self.mot={}        
             
             
             

@@ -52,6 +52,19 @@ class Mysql:
         cursor.execute(requete)
         
     def recuperation_donnee(self,requete):
+        """
+    
+        Parameters
+        ----------
+        requete : TYPE: String
+            DESCRIPTION:contient la requete en sql
+
+        Returns
+        -------
+        myresult : TYPE
+            DESCRIPTION.
+
+        """
         cursor = self.base.cursor()
         cursor.execute(requete)
         myresult = cursor.fetchall()

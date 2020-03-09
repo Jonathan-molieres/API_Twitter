@@ -19,7 +19,7 @@ class Carte:
         """
         Parameters
         ----------
-        coord :TYPE:Liste , optional.
+        coord :TYPE: Liste , optional.
             DESCRIPTION:contient les coordonnees de depart. The default is [48.8534,2.3488] qui correspond à Paris.
         Returns
         -------
@@ -36,7 +36,7 @@ class Carte:
             DESCRIPTION: Liste des coordonnees
         rayon : TYPE: entier
             DESCRIPTION: determine le rayon du cercle
-        color : TYPE:chaine de caractere , optional
+        color : TYPE:String , optional
             DESCRIPTION: Definie la couleur du cercle,The default is 'crimson'.
 
         Returns
@@ -57,20 +57,17 @@ class Carte:
         ----------
         coordonnee : TYPE:Liste
             DESCRIPTION: Liste des coordonnees 
-        tooltip : TYPE: Chaine de caractere 
-            DESCRIPTION:Chaine de caractere visible
-        popupstr : TYPE: Chaine de caractere
-            DESCRIPTION: Chaine de caractere visible lorsqu'on clique sur le marqueur
+        tooltip : TYPE: String 
+            DESCRIPTION:String visible
+        popupstr : TYPE: String
+            DESCRIPTION: String visible lorsqu'on clique sur le marqueur
 
         Returns
         -------
         None.
         lien pour modifier l'apparence des icones : getbootstrap.com/docs/3.3/components/
         """
-        fl.Marker(coordonnee, popup='<i>'+str(popupstr)+'</i>', tooltip=tooltip,icon=fl.Icon(color='black',icon_color='yellow',icon='glyphicon-user')).add_to(self.carte) 
-    def changement_origine(self,coord):
-        self.depart=self.carte=fl.Map(location=coord,tiles='Mapbox')
-        
+        fl.Marker(coordonnee, popup='<i>'+str(popupstr)+'</i>', tooltip=tooltip,icon=fl.Icon(color='black',icon_color='yellow',icon='glyphicon-user')).add_to(self.carte)
     def save(self,fil='index.html'):
         """
         Fonction de creaction du html
@@ -82,7 +79,6 @@ class Carte:
         Returns
         -------
         None.
-
         """
         self.carte.save("html\\"+fil)
         
@@ -93,9 +89,9 @@ class Carte:
         ----------
         locations : TYPE: Liste  des coordonnees
             DESCRIPTION:
-        tooltip : TYPE: chaine de caractere visible sur la carte, optional
+        tooltip : TYPE: String visible sur la carte, optional
             DESCRIPTION: phrase à ajouter.The default is None.
-        popup : TYPE: Chaine de caractere visible lorsqu'on clique sur le polygon,optional
+        popup : TYPE: String visible lorsqu'on clique sur le polygon,optional
             DESCRIPTION. The default is True.
         Returns
         -------
@@ -105,7 +101,7 @@ class Carte:
         
     def departement(self):
         """
-        Ajoute les departements sur la carte
+        Ajoute les departements sur la carte.
         Returns
         -------
         None.
@@ -148,20 +144,36 @@ class Carte:
 
         Returns
         -------
-        TYPE:Json
+        TYPE: Json
             DESCRIPTION:Json de la requete 
 
         """
         requete=(requests.get(url+ville+"+"+pays+'&polygon_geojson=1&format=json')).json()
-        return requete[0]
-    
+        return requete
+        if requete[0]["geojson"]["type"]=="Polygon":
+            return requete[0]["geojson"]["coordinates"]
+        else:
+            return requete[0]["geojson"]["coordinates"]
     def requete_ville(self,altitude,longitude,url="https://nominatim.openstreetmap.org/reverse?lat="):
-        
-        requete=(requests.get(url+str(altitude)+"lon"+longitude+'&polygon_geojson=1&format=json')).json()
-        return requete[0]
-        
-        
-        
+        """
+        Parameters
+        ----------
+        altitude : TYPE:float
+            DESCRIPTION: Contient 
+        longitude : TYPE: float
+            DESCRIPTION:
+        url : TYPE, optional
+            DESCRIPTION. The default is "https://nominatim.openstreetmap.org/reverse?lat=".
+
+        Returns
+        -------
+        requete : TYPE
+            DESCRIPTION.
+
+        """
+        requete=(requests.get(url+str(altitude)+"&lon"+str(longitude)+'&polygon_geojson=1&format=json')).json()
+        return requete
+
         
         
         
