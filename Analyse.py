@@ -54,7 +54,7 @@ class Analyse:
         -------
         None.
         """
-        ponctuation=[' ',',',"'","  ",";","!","...","?","",':','-',"’","«","»"]#Liste des ponctuations
+        ponctuation=[' ',',',"'","  ",";","!","...","?","",':','-',"’","«","»",".",""]#Liste des ponctuations
         tweet=data.lower().split()#liste de chaque mot sans majuscule
         
         for mot_entier in tweet:

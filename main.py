@@ -126,23 +126,14 @@ def sql(nom_base):
     texts=[]
     L_moyenne=[]
     ville=[]
-    
-    if len(resultat[0])==5:
-        for donnee in resultat:
-            ville.append(donnee[1])
-            L_moyenne.append([donnee[2],donnee[3]])
-            texts.append(donnee[4])
+    pays=[]
+    for donnee in resultat:
+        ville.append(donnee[1])
+        pays.append(donnee[2])
+        L_moyenne.append([donnee[3],donnee[4]])
+        texts.append(donnee[5])
             
-        return L_moyenne,texts,ville 
-    else:
-        pays=[]
-        for donnee in resultat:
-            ville.append(donnee[1])
-            pays.append(donnee[2])
-            # L_moyenne.append([donnee[3],donnee[4]])
-            texts.append(donnee[5])
-            
-        return ville,pays,texts
+    return ville,pays,L_moyenne,texts
 # =============================================================================
 # Main
 # =============================================================================
@@ -154,7 +145,7 @@ if __name__=='__main__':
     while application:
         
         print("Entrer ajouter pour rajouter des tweets a la base. Entrer analyse pour analyser les tweets."+
-              "\nEntrer carte, pour afficher les tweets du monde avec l'analyse. Pour quitter, entrer exit.")
+              "\nPour quitter, entrer exit.")
         fonction=input("Votre choix : ")
         if fonction == "analyse":
 
@@ -181,48 +172,19 @@ if __name__=='__main__':
             if type_donnee=='sql':
                 """Analyse des tweets de la table tweets et creaction de la carte des tweets"""
                 carte=Carte()
-                resultat=sql("tweets")
+                Base=input("Choix de la base (tweets_paris, tweets_france) : ")
+                resultat=sql(Base)
                 analyse=Analyse()
                 for i in range(len(resultat[1])):
-                    analyse.ajout_tweet(resultat[1][i])#analyse chaque tweet
+                    analyse.ajout_tweet(resultat[3][i])#analyse chaque tweet
                 #analyse global et affichage
                 analyse.__str__(analyse.frequence_total(10))
                 for i in range(len(resultat[0])):
-                    carte.marqueur([resultat[0][i][0],resultat[0][i][1]],resultat[1][i],resultat[2][i])#ajout des marqueurs
+                    carte.marqueur(resultat[2][i],resultat[0][i],resultat[3][i])#ajout des marqueurs
                 carte.save("sql.html")#creation du html
                 print("=============================================================================")
                 print("         Le html est crée dans le dossier html avec le nom sql.")
                 print("=============================================================================")
-                
-        elif fonction == "carte":
-            """Analyse des tweets par ville de la table tweets_france et creaction de la carte des tweets"""
-            carte=Carte()
-            resultat=sql("tweets_france")
-            compteur_ville={}
-            for i in range(len(resultat[0])):
-                if (resultat[0][i],resultat[1][i]) in compteur_ville.keys():
-                    compteur_ville[(resultat[0][i],resultat[1][i])]+=(1,[resultat[2][i]]+compteur_ville[(resultat[0][i],resultat[1][i])][1])
-                else:
-                    compteur_ville[(resultat[0][i],resultat[1][i])]=(1,resultat[2])
-            analyse=Analyse()
-            for key in compteur_ville.keys():
-                """verifier la requete et gerer en sql"""
-                analyse.renitilaiser_mot()
-                for txt in compteur_ville[key][1]:
-                    analyse.ajout_tweet(txt)
-                # print(carte.requete_coord(key[0],key[1])
-                try:
-                    requete=carte.requete_coord(key[0],key[1])                
-                    if requete[0]["geojson"]["type"]=="Polygon":
-                        carte.polygon(carte.inverse_coordonnee(requete[0]["geojson"]["coordinates"][0]),compteur_ville[key][0],analyse.phrase_resultat(analyse.frequence_total(3)))
-                    elif requete[0]["geojson"]["type"]=="Point":
-                        carte.marqueur(carte.inverse_coordonnee(requete[0]["geojson"]["coordinates"]),analyse.phrase_resultat(analyse.frequence_total(3)),compteur_ville[key][0])
-                except:
-                    pass
-            carte.save("carte.html")
-            print("=============================================================================")
-            print("         Le html est crée dans le dossier html avec le nom carte.")
-            print("=============================================================================") 
         elif fonction == "ajouter":
             """Permet d'ajouter des nouveaux tweets aux bases"""
             # Variables that contains the user credentials to access Twitter API 
