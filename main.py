@@ -188,10 +188,6 @@ if __name__=='__main__':
         elif fonction == "ajouter":
             """Permet d'ajouter des nouveaux tweets aux bases"""
             # Variables that contains the user credentials to access Twitter API 
-            ACCESS_TOKEN = '1222959339163594752-NOAONLptGZvumYp2gTNSElFjixkP8i'
-            ACCESS_SECRET = 'QkH6pFC7nO69Ctk6plc2DJGWry6njuVq59TL7PzduTIrM'
-            CONSUMER_KEY = '54ElR6xtokKeFt8fygBdgNhhZ'
-            CONSUMER_SECRET = 'QGLBx1H3AlquacgEa08yO8MXujrMi3rHOb1n6hejctQgbxq8CK'
             # Connection
             auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
             auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
